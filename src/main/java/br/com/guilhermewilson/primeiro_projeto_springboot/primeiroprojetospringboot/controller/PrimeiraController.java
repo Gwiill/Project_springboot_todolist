@@ -1,4 +1,4 @@
-package br.com.guilhermewilson.primeiro_projeto_springboot.controller;
+package br.com.guilhermewilson.primeiro_projeto_springboot.primeiroprojetospringboot.controller;
 
 import java.util.Map;
 
