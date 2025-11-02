@@ -16,7 +16,7 @@ public class UserModel {
 
 
 @Id
-@GeneratedValue(generator = "UUID")
+@GeneratedValue(generator = "UUID") /*Aqui geramos ID's de de forma que sejam mais únicos, e de certa forma mais seguros*/
 private UUID id;
 
     private String username;
@@ -24,6 +24,6 @@ private UUID id;
     private String password;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt;  /*Com esta @CreationTimestamp, registramos quando um log ou usuário é criado*/
     
 }
