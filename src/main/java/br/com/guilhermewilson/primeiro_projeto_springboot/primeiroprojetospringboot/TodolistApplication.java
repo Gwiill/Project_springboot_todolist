@@ -6,10 +6,10 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "br.com.guilhermewilson")		/*Essa annotation especifica por qual pacote base deve começar o escaneamento dos processos do SpringBoot*/
-public class PrimeiroProjetoSpringbootApplication {
+public class TodolistApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PrimeiroProjetoSpringbootApplication.class, args);
+		SpringApplication.run(TodolistApplication.class, args);
 	}
 
 }
