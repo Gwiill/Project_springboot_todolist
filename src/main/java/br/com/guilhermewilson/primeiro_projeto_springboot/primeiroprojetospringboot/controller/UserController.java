@@ -25,7 +25,7 @@ public class UserController {
     @SuppressWarnings("rawtypes")
     @PostMapping("/")
     public ResponseEntity create(@RequestBody UserModel userModel) {
-      var user = this.userRepository.findUsername(userModel.getUsername());
+      var user = this.userRepository.findByUsername(userModel.getUsername());
       if (user != null) {
         // mensagem de erro
         // Status code
