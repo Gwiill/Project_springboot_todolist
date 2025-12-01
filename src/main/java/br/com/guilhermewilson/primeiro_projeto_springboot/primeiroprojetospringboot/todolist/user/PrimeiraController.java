@@ -1,4 +1,4 @@
-package br.com.guilhermewilson.primeiro_projeto_springboot.primeiroprojetospringboot.controller;
+package br.com.guilhermewilson.primeiro_projeto_springboot.primeiroprojetospringboot.todolist.user;
 
 import java.util.Map;
 
