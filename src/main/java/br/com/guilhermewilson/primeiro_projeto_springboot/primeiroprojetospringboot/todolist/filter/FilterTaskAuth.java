@@ -3,49 +3,66 @@ package br.com.guilhermewilson.primeiro_projeto_springboot.primeiroprojetospring
 import java.io.IOException;
 import java.util.Base64;
 
-import org.apache.tomcat.util.http.parser.Authorization;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import br.com.guilhermewilson.primeiro_projeto_springboot.primeiroprojetospringboot.todolist.user.IUserReposity;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class FilterTaskAuth extends OncePerRequestFilter{
+public class FilterTaskAuth extends OncePerRequestFilter {
 
-    @SuppressWarnings("null")
+    @Autowired
+    private IUserReposity userRepository;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        
-        //pegar a autentiacação (usuario e senha)
-        var authorization = request.getHeader("Authorization");
 
-        var authEncoded = authorization.substring("Basic ".length()).trim();
+        var servletPath = request.getServletPath();
 
-        byte[] authDecode = Base64.getDecoder().decode(authEncoded);
+        // cobre /tasks e /tasks/ e /tasks/qualquercoisa
+        if (servletPath.startsWith("/tasks")) {
 
-        var authString = new String(authDecode);
-        
-          // [gwiill, 12345]
-        String[] credentials = authString.split(":");
-        String username = credentials[0];
-        String password = credentials[1];
-        System.out.println("Authorization");
-        System.out.println(username);
-        System.out.println(password);
-        
-        //validar usuáriio
+            var authorization = request.getHeader("Authorization");
 
-        //Validar senha
+            if (authorization == null || !authorization.startsWith("Basic ")) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
 
-        //Segue viagem
+            var authEncoded = authorization.substring("Basic ".length()).trim();
 
-        filterChain.doFilter(request, response);     
+            byte[] authDecode = Base64.getDecoder().decode(authEncoded);
+            var authString = new String(authDecode);
+
+            String[] credentials = authString.split(":", 2);
+            if (credentials.length != 2) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            String username = credentials[0];
+            String password = credentials[1];
+
+            var user = this.userRepository.findByUsername(username);
+            if (user == null) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            var passwordVerify = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
+            if (!passwordVerify.verified) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+        }
+
+        filterChain.doFilter(request, response);
     }
-
-
-
 }
