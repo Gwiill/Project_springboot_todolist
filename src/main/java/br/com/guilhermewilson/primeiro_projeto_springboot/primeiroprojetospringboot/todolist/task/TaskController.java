@@ -34,7 +34,7 @@ import jakarta.servlet.http.HttpServletRequest;
             // PRIMEIRO IF: Valida se as datas estão no passado (Comparando com a data atual)
             if (currentDate.isAfter(taskModel.getStartAt()) || currentDate.isAfter(taskModel.getEndAt())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("A data de início / data de término deve ser maior do que a data atual");
+                        .body("A data inserida de início / data de término deve ser maior do que a data atual");
             }
 
             // SEGUNDO IF: Valida a ordem das datas (Comparando início com o fim)
