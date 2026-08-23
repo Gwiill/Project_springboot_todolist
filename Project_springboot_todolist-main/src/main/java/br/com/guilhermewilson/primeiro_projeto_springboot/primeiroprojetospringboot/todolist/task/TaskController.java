@@ -37,7 +37,7 @@ import jakarta.servlet.http.HttpServletRequest;
             // SEGUNDO IF: Valida a ordem das datas (Comparando início com o fim)
             if (taskModel.getStartAt().isAfter(taskModel.getEndAt())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("A data de início deve ser menor do que a data de término");
+                        .body("A data de início deve ser menor do que a data de término.");
             }
 
             var task = this.taskRepository.save(taskModel);
